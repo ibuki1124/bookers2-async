@@ -4,29 +4,53 @@
       <%= render "users/user_info", user: @user %>
       <%= render "new_book", book: @book_new %>
     </div>
-    
+
     <div class="col-md-8 offset-md-1">
       <h2>Book detail</h2>
       <table class="table">
         <tbody>
-          <td>
-            <%= link_to user_path(@book.user) do %>
-             <%= image_tag @user.get_profile_image(100, 100) %><br>
-             <%= @book.user.name %>
-           <% end %>
-          </td>
-          <td>
-            <%= link_to book_path(@book) do %>
-              <%= @book.title %>
+          <tr>
+            <td>
+              <%= link_to user_path(@book.user) do %>
+                <%= image_tag @user.get_profile_image(100, 100) %><br>
+                <%= @book.user.name %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to book_path(@book) do %>
+                <%= @book.title %>
+              <% end %>
+            </td>
+            <td><%= @book.body %></td>
+            <% if @user == current_user %>
+              <td><%= link_to "Edit", edit_book_path(@book), class: "btn btn-success btn-sm" %></td>
+              <td><%= link_to "Destroy", book_path(@book), method: :delete, "data-confirm" => "本当に消しますか？", class: "btn btn-danger btn-sm" %></td>
             <% end %>
-          </td>
-          <td><%= @book.body %></td>
-          <% if @user == current_user %>
-            <td><%= link_to "Edit", edit_book_path(@book), class: "btn btn-success btn-sm" %></td>
-            <td><%= link_to "Destroy", book_path(@book), method: :delete, "data-confirm" => "本当に消しますか？", class: "btn btn-danger btn-sm" %></td>
-          <% end %>
+          </tr>
         </tbody>
       </table>
+      
+      <% @book.book_comments.each do |book_comment| %>
+        <div class="d-flex">
+          <%= link_to user_path(book_comment.user) do %>
+            <%= image_tag book_comment.user.get_profile_image(60, 60) %><br>
+            <%= book_comment.user.name %>
+          <% end %>
+          <dix class="d-flex align-items-center">
+            <%= book_comment.comment %>
+            <!--削除ボタン-->
+          </dix>
+        </div>
+      <% end %>
+      
+      <%= form_with model: [@book, @book_comment] do |f| %>
+        <div class="form-group">
+          <%= f.text_area :comment, rows: "5", class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= f.submit "送信" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
