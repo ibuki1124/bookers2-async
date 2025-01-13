@@ -7,6 +7,25 @@ class User < ApplicationRecord
   has_many :books, dependent: :destroy
   has_many :book_comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
+  # 自分がフォローする側の関係
+  has_many :relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  # 自分がフォローされる側の関係
+  has_many :relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+
+  has_many :following, through: :relationships, source: :followed
+  has_many :followers, through: :relationships, source: :follower
+  # フォローするとき
+  def follow(user)
+    relationships.create(followed_id: user.id)
+  end
+  # フォローを外すとき
+  def unfollow(user)
+    relationships.find_by(followed_id: user.id).destroy
+  end
+  # フォローしているか確認するとき
+  def following?(user)
+    following.Include?(user)
+  end
   
   has_one_attached :profile_image
   
