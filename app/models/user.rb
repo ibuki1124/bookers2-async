@@ -15,13 +15,13 @@ class User < ApplicationRecord
   has_many :following, through: :relationships, source: :followed
   has_many :followers, through: :relationships, source: :follower
   # フォローするとき
-  def follow(user)
-    relationships.create(followed_id: user.id)
-  end
+  # def follow(user)
+  #   relationships.create(followed_id: user.id)
+  # end
   # フォローを外すとき
-  def unfollow(user)
-    relationships.find_by(followed_id: user.id).destroy
-  end
+  # def unfollow(user)
+  #   relationships.find_by(followed_id: user.id).destroy
+  # end
   # フォローしているか確認するとき
   def following?(user)
     following.Include?(user)
