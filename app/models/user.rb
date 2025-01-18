@@ -24,7 +24,7 @@ class User < ApplicationRecord
   # end
   # フォローしているか確認するとき
   def following?(user)
-    following.Include?(user)
+    following.include?(user)
   end
   
   has_one_attached :profile_image
