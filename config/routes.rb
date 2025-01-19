@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     get "following" => "relationships#following", as: "following"
   end
 
+  get "search", to: "searches#search"
+
   resources :books, only: [:show, :index, :create, :edit, :update, :destroy] do
     resources :book_comments, only: [:create, :destroy]
     resource :favorites, only: [:create, :destroy]
